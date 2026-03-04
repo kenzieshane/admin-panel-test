@@ -13,9 +13,9 @@ class MemberResource extends Resource
 protected static ?string $model = Member::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
 
-protected static ?string $navigationLabel = 'Anggota';
+protected static ?string $navigationLabel = 'pemasok dana';
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Manajemen Anggota';
+    protected static string | \UnitEnum | null $navigationGroup = 'anggota partai';
 
 protected static ?int $navigationSort = 1;
 
@@ -23,83 +23,7 @@ public static function form(Schema $schema): Schema
 {
     return $schema
         ->schema([
-            Forms\Components\Section::make('Informasi Pribadi')
-                ->schema([
-                    Forms\Components\TextInput::make('member_code')
-                        ->label('Kode Anggota')
-                        ->default(fn () => 'MBR-' . strtoupper(Str::random(6)))
-                        ->disabled()
-                        ->dehydrated()
-                        ->required()
-                        ->unique(ignoreRecord: true),
-
-                    Forms\Components\TextInput::make('name')
-                        ->label('Nama Lengkap')
-                        ->required()
-                        ->maxLength(255),
-
-                    Forms\Components\TextInput::make('email')
-                        ->label('Email')
-                        ->email()
-                        ->required()
-                        ->unique(ignoreRecord: true)
-                        ->maxLength(255),
-
-                    Forms\Components\TextInput::make('phone')
-                        ->label('Nomor Telepon')
-                        ->tel()
-                        ->required()
-                        ->maxLength(255),
-
-                    Forms\Components\Textarea::make('address')
-                        ->label('Alamat')
-                        ->rows(3)
-                        ->columnSpanFull(),
-
-                    Forms\Components\DatePicker::make('date_of_birth')
-                        ->label('Tanggal Lahir')
-                        ->maxDate(now()->subYears(5)),
-
-                    Forms\Components\Select::make('gender')
-                        ->label('Jenis Kelamin')
-                        ->options([
-                            'male' => 'Laki-laki',
-                            'female' => 'Perempuan',
-                        ])
-                        ->required(),
-
-                    Forms\Components\FileUpload::make('photo')
-                        ->label('Foto')
-                        ->image()
-                        ->directory('member-photos')
-                        ->imageEditor()
-                        ->circleCropper(),
-                ])
-                ->columns(2),
-
-            Forms\Components\Section::make('Status Keanggotaan')
-                ->schema([
-                    Forms\Components\DatePicker::make('membership_start')
-                        ->label('Tanggal Mulai')
-                        ->required()
-                        ->default(now()),
-
-                    Forms\Components\DatePicker::make('membership_end')
-                        ->label('Tanggal Berakhir')
-                        ->required()
-                        ->default(now()->addYear()),
-
-                    Forms\Components\Select::make('status')
-                        ->label('Status')
-                        ->options([
-                            'active' => 'Aktif',
-                            'inactive' => 'Tidak Aktif',
-                            'suspended' => 'Ditangguhkan',
-                        ])
-                        ->required()
-                        ->default('active'),
-                ])
-                ->columns(3),
+            
         ]);
 }
 
@@ -172,19 +96,10 @@ public static function table(Table $table): Table
                 ->query(fn ($query) => $query->where('membership_end', '<=', now()->addMonth())),
         ])
         ->actions([
-            Tables\Actions\EditAction::make(),
-            Tables\Actions\DeleteAction::make(),
-            Tables\Actions\Action::make('generateQR')
-                ->label('Generate QR')
-                ->icon('heroicon-o-qr-code')
-                ->action(function (Member $record) {
-                    // Kita akan implementasi di Bab 6
-                }),
+            
         ])
         ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]),
+
         ]);
 }
 
