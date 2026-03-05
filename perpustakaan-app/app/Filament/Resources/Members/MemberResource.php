@@ -2,12 +2,10 @@
 namespace App\Filament\Resources\Members;
 use App\Filament\Resources\Members\Pages;
 use App\Models\Member;
-use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 class MemberResource extends Resource
 {
 protected static ?string $model = Member::class;
@@ -95,10 +93,10 @@ public static function table(Table $table): Table
                 ->label('Akan Berakhir')
                 ->query(fn ($query) => $query->where('membership_end', '<=', now()->addMonth())),
         ])
-        ->actions([
+        ->recordActions([
             
         ])
-        ->bulkActions([
+        ->toolbarActions([
 
         ]);
 }
